@@ -8,13 +8,18 @@ namespace BuyCake
 {
     public class Cake
     {
-        int price = 0;
-        string form;
-        string glaze;
-        int count = 0;
-        string decor;
-        string taste;
-        string size;
+        public int price = 0;
+        public string form = "";
+        public string glaze = "";
+        public int count = 0;
+        public string decor = "";
+        public string taste = "";
+        public string size = "";
+
+        /*public void plusPrice(int pricePl)
+        {
+            price += pricePl;
+        }*/
 
     }
 }

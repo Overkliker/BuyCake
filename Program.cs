@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using Microsoft.Win32;
 
@@ -45,17 +46,18 @@ namespace BuyCake
 
                 if (key.Key == ConsoleKey.Enter)
                 {
-                    checkMenu(pose, newCake);
+                    newCake = checkMenu(pose, newCake);
+                    
                 }
                 Console.Clear();
-                MenuMain(pose);
+                MenuMain(pose, newCake);
                 Console.SetCursorPosition(0, pose);
                 Console.Write("->");
 
             }
         }
 
-        public static void MenuMain(int pose)
+        public static void MenuMain(int pose, Cake priceCake)
         {
             Console.WriteLine(" Таки это еврейская кондитерская, выберете параметры для тортика");
             Console.WriteLine("....................................................");
@@ -67,13 +69,13 @@ namespace BuyCake
             Console.WriteLine("   Декор");
             Console.WriteLine("   Конец заказа");
             Console.WriteLine();
-            Console.WriteLine("Цена: " + pose);
-            Console.WriteLine("Ваш заказ: ");
+            Console.WriteLine("Цена: " + priceCake.price + " шекелей");
+            Console.WriteLine($"Ваш заказ: {priceCake.price} {priceCake.size} {priceCake.form} {priceCake.count}\t {priceCake.glaze} {priceCake.decor} {priceCake.taste}");
 
             
         }
 
-        public static void checkMenu(int pose, Cake ck)
+        public static Cake checkMenu(int pose, Cake ck)
         {
             Dictionary<string, int> l1 = new Dictionary<string, int> { { "Треугольный", 300}, { "Квадратный", 310}, { "Круглый", 290} };
             Dictionary<string, int> l2 = new Dictionary<string, int> { { "60 см", 3000}, { "40 см", 2100}, { "30 см", 1900} };
@@ -84,30 +86,31 @@ namespace BuyCake
             {
                 case 2:
                     Console.Clear();
-                    spawnForm(ck, l1, pose);
+                    ck = spawnForm(ck, l1, pose);
                     break;
                 case 3:
                     Console.Clear();
-                    spawnForm(ck, l2, pose);
+                    ck = spawnForm(ck, l2, pose);
                     break;
                 case 4:
                     Console.Clear();
-                    spawnForm(ck, l3, pose);
+                    ck = spawnForm(ck, l3, pose);
                     break;
                 case 5:
                     break;
                 case 6:
                     Console.Clear();
-                    spawnForm(ck, l4, pose);
+                    ck = spawnForm(ck, l4, pose);
                     break;
                 case 7:
                     Console.Clear();
-                    spawnForm(ck, l5, pose);
+                    ck = spawnForm(ck, l5, pose);
                     break;
                 case 8:
                     break;
 
             }
+            return ck;
         }
 
         public static Cake spawnForm(Cake ck, Dictionary<string, int> form, int myPose)
@@ -115,6 +118,20 @@ namespace BuyCake
             int pose = 2;
             int lastPose = form.Count() + 1;
             int rasn = lastPose - pose;
+            var keys = form.Keys;
+            Dictionary<int, Dictionary<string, int>> price = new Dictionary<int, Dictionary<string, int>>();
+            int count = 2;
+            
+
+
+            foreach (string zn in keys)
+            {
+
+                price.Add(count, new Dictionary<string, int> { { zn, form[zn] } });
+                count++;
+            }
+
+
 
             while (true)
             {
@@ -148,10 +165,84 @@ namespace BuyCake
 
                 else if (key.Key == ConsoleKey.Enter)
                 {
-                    for (int i = pose; i <= lastPose; i++)
+                    var f1 = price[pose];
+                    string key1 = "";
+                    foreach (var i in f1.Keys)
                     {
-                        if (form[pose - 1].Values)
+                        key1 = i;
                     }
+
+                    switch (myPose)
+                    {
+                        case 2:
+                            if (ck.form != "")
+                            {
+                                ck.price -= form[ck.form];
+                                ck.price += f1[key1];
+                                ck.form = key1;
+                            }
+                            else if (ck.form == "") 
+                            {
+                                ck.price += f1[key1];
+                                ck.form = key1;
+                            }
+                            break;
+                        case 3:
+                            if (ck.size != "")
+                            {
+                                ck.price -= form[ck.size];
+                                ck.price += f1[key1];
+                                ck.size = key1;
+                            }
+                            else
+                            {
+                                ck.price += f1[key1];
+                                ck.size = key1;
+                            }
+                            break;
+                        case 4:
+                            if (ck.taste != "")
+                            {
+                                ck.price -= form[ck.taste];
+                                ck.price += f1[key1];
+                                ck.taste = key1;
+                            }
+                            else
+                            {
+                                ck.price += f1[key1];
+                                ck.taste = key1;
+                            }
+                            break;
+                        case 6:
+                            if (ck.glaze != "")
+                            {
+                                ck.price -= form[ck.glaze];
+                                ck.price += f1[key1];
+                                ck.glaze = key1;
+                            }
+                            else
+                            {
+                                ck.price += f1[key1];
+                                ck.glaze = key1;
+                            }
+                            break;
+                        case 7:
+                            if (ck.decor != "")
+                            {
+                                ck.price -= form[ck.decor];
+                                ck.price += f1[key1];
+                                ck.decor = key1;
+                            }
+                            else
+                            {
+                                ck.price += f1[key1];
+                                ck.decor = key1;
+                            }
+                            break;
+
+                    }
+
+                    break;
                 }
 
                 else if (key.Key == ConsoleKey.Escape)
