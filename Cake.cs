@@ -11,7 +11,7 @@ namespace BuyCake
         public int price = 0;
         public string form = "";
         public string glaze = "";
-        public int count = 0;
+        public int count = 1;
         public string decor = "";
         public string taste = "";
         public string size = "";

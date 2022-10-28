@@ -87,6 +87,7 @@ namespace BuyCake
                 case 2:
                     Console.Clear();
                     ck = spawnForm(ck, l1, pose);
+                    
                     break;
                 case 3:
                     Console.Clear();
@@ -97,6 +98,7 @@ namespace BuyCake
                     ck = spawnForm(ck, l3, pose);
                     break;
                 case 5:
+                    ck = col(ck);
                     break;
                 case 6:
                     Console.Clear();
@@ -107,6 +109,7 @@ namespace BuyCake
                     ck = spawnForm(ck, l5, pose);
                     break;
                 case 8:
+                    ck = check(ck);
                     break;
 
             }
@@ -177,6 +180,7 @@ namespace BuyCake
                         case 2:
                             if (ck.form != "")
                             {
+                                
                                 ck.price -= form[ck.form];
                                 ck.price += f1[key1];
                                 ck.form = key1;
@@ -190,6 +194,7 @@ namespace BuyCake
                         case 3:
                             if (ck.size != "")
                             {
+                                
                                 ck.price -= form[ck.size];
                                 ck.price += f1[key1];
                                 ck.size = key1;
@@ -203,6 +208,7 @@ namespace BuyCake
                         case 4:
                             if (ck.taste != "")
                             {
+                                
                                 ck.price -= form[ck.taste];
                                 ck.price += f1[key1];
                                 ck.taste = key1;
@@ -216,6 +222,7 @@ namespace BuyCake
                         case 6:
                             if (ck.glaze != "")
                             {
+                                
                                 ck.price -= form[ck.glaze];
                                 ck.price += f1[key1];
                                 ck.glaze = key1;
@@ -278,6 +285,67 @@ namespace BuyCake
                 Console.SetCursorPosition(0, pose);
                 Console.Write("->");
             }
+            return ck;
+        }
+
+        private static Cake col(Cake ck)
+        {
+            if (ck.price == 0)
+            {
+                while (true)
+                {
+                    Console.Clear();
+                    Console.WriteLine("Вы ещё не выбрали ни одного элемента, нажмите Esc, что бы выйти в меню");
+                    ConsoleKeyInfo key = Console.ReadKey();
+                    if (key.Key == ConsoleKey.Escape)
+                    {
+                        break;
+                    }
+                    
+                }
+                return ck;
+            }
+            
+            Console.Clear();
+            Console.WriteLine("Введите количество тортов:");
+            int colT = Convert.ToInt32(Console.ReadLine());
+            ck.count = colT;
+            
+            
+            
+            return ck;
+        }
+
+        [STAThread]
+        private static Cake check(Cake ck)
+        {
+            if (ck.price == 0)
+            {
+                Console.WriteLine("Вы ещё не выбрали ни одного пункта меню");
+                return ck;
+            }
+            Console.Clear();
+            string check = $"Заказ от: {DateTime.Now} \n Заказ: {ck.size} {ck.form} {ck.count} {ck.glaze} {ck.decor} {ck.taste} \n Цена: {ck.price * ck.count}";
+            Console.WriteLine("Введите название файл:");
+            string puti = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+            string put1 = Directory.GetCurrentDirectory().Substring(0, 36);
+
+            string sav = Console.ReadLine();
+
+
+
+            File.WriteAllText($"{puti}/{sav}", check);
+
+            File.AppendAllText($"{put1}/allCheck.txt", $"\n ...................");
+            File.AppendAllText($"{put1}/allCheck.txt", $"\n {check}");
+
+            ck.price = 0;
+            ck.form = "";
+            ck.count = 1;
+            ck.glaze = "";
+            ck.size = "";
+            ck.decor = "";
+            ck.taste = "";
             return ck;
         }
 
